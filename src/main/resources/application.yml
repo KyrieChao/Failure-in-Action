@@ -1,1 +1,21 @@
-spring.application.name=FailureDemo
+spring:
+  application:
+    name: Failure-Demo
+  datasource:
+    url: jdbc:mysql://localhost:3306/chao
+    username: root
+    password: 893760
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+
+fail-fast:
+  shadow-trace: true
+  verbose: true

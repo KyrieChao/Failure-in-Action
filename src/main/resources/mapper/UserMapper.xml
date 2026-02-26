@@ -10,7 +10,7 @@
         <result property="nickname" column="nickname"/>
         <result property="email" column="email"/>
         <result property="phone" column="phone"/>
-        <result property="passwordHash" column="password_hash"/>
+        <result property="password" column="password"/>
         <result property="gender" column="gender"/>
         <result property="birthday" column="birthday"/>
         <result property="status" column="status"/>
@@ -20,7 +20,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,username,nickname,email,phone,password_hash,
+        id,username,nickname,email,phone,password,
         gender,birthday,status,is_deleted,create_time,
         update_time
     </sql>

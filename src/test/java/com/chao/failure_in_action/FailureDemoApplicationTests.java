@@ -1,4 +1,4 @@
-package com.chao.failuredemo;
+package com.chao.failure_in_action;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,8 +1,7 @@
-package com.chao.user.contant;
+package com.chao.failure_in_action.contant;
 
 /**
  * 用户常量
- *
  */
 public interface UserConstant {
 
@@ -13,7 +12,7 @@ public interface UserConstant {
     /**
      * 盐值，混淆密码
      */
-    String SALT = "chao893760";
+    String SALT = "242702";
     //  ------- 权限 --------
     /**
      * 默认权限
