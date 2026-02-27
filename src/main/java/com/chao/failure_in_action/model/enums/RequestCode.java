@@ -2,6 +2,11 @@ package com.chao.failure_in_action.model.enums;
 
 import com.chao.failfast.internal.ResponseCode;
 
+/**
+ * 请求错误码
+ * @author Chao
+ * @Github <a href="https://github.com/KyrieChao/Failure">Failure</a>
+ */
 public enum RequestCode implements ResponseCode {
 
     // 请求对象不能为空

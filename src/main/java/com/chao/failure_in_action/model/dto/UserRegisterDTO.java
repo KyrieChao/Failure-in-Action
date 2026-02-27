@@ -4,6 +4,11 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 用户注册
+ * @author Chao
+ * @Github <a href="https://github.com/KyrieChao/Failure">Failure</a>
+ */
 @Data
 public class UserRegisterDTO {
     private Long id;

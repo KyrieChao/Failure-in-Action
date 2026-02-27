@@ -57,16 +57,10 @@
             <version>1.18.28</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.github.KyrieChao</groupId>-->
-<!--            <artifactId>Failure</artifactId>-->
-<!--            <version>1.2.0</version>-->
-<!--        </dependency>-->
-
         <dependency>
-            <groupId>com.chao</groupId>
-            <artifactId>fail-fast-spring-boot-starter</artifactId>
-            <version>1.2.0</version>
+            <groupId>com.github.KyrieChao</groupId>
+            <artifactId>Failure</artifactId>
+            <version>1.2.2</version>
         </dependency>
     </dependencies>
 

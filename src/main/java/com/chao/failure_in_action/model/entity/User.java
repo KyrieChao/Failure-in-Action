@@ -12,6 +12,8 @@ import java.util.Date;
 
 /**
  * 用户表
+ * @author Chao
+ * @Github <a href="https://github.com/KyrieChao/Failure">Failure</a>
  */
 @TableName(value = "user")
 @Data
@@ -43,7 +45,7 @@ public class User implements Serializable {
     private String phone;
 
     /**
-     * 密码哈希（bcrypt/argon2）
+     * 密码哈希（bcrypt/argon2/MD5）
      */
     private String password;
 

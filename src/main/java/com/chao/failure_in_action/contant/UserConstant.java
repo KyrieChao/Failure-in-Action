@@ -2,6 +2,8 @@ package com.chao.failure_in_action.contant;
 
 /**
  * 用户常量
+ * @author Chao
+ * @Github <a href="https://github.com/KyrieChao/Failure">Failure</a>
  */
 public interface UserConstant {
 
@@ -13,6 +15,8 @@ public interface UserConstant {
      * 盐值，混淆密码
      */
     String SALT = "242702";
+
+    int DEFAULT_STATUS = 1;
     //  ------- 权限 --------
     /**
      * 默认权限

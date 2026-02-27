@@ -18,6 +18,7 @@ import java.util.Set;
 import static com.chao.failure_in_action.contant.UserConstant.SALT;
 
 /**
+ * @author Chao
  * 统一校验注册器（TypedValidator 方式）
  * <p>
  * 本项目同时演示三种校验写法：
@@ -26,6 +27,7 @@ import static com.chao.failure_in_action.contant.UserConstant.SALT;
  * 3. Service 层直接用 Failure 链式调用（早期版本示例）
  * <p>
  * 推荐生产环境统一使用一种方式（建议 TypedValidator 或单独 FastValidator）
+ * @Github <a href="https://github.com/KyrieChao/Failure">Failure</a>
  */
 @Component
 public class CustomValidator extends TypedValidator {
@@ -53,11 +55,11 @@ public class CustomValidator extends TypedValidator {
                     .state(user != null, UserCode.USER_NOT_FOUND)
                     .verify();
         });
+
         // 注册校验
         register(UserRegisterDTO.class, (dto, ctx) -> {
             Failure.with(ctx)
                     .satisfies(dto.getGender(), GENDER_STATUS::contains, UserCode.GENDER_UNKNOWN,"性别")
-                    .satisfies(dto.getStatus(), GENDER_STATUS::contains, UserCode.STATUS_DISABLED)
                     .notBlank(dto.getUsername(), UserCode.USERNAME_BLANK)
                     .notBlank(dto.getNickname(), UserCode.NICKNAME_BLANK)
                     .email(dto.getEmail(), UserCode.EMAIL_INVALID)
@@ -88,5 +90,10 @@ public class CustomValidator extends TypedValidator {
                 .eq(column, value)
                 .eq(User::getIsDeleted, 0)
                 .exists();
+    }
+
+    @Override
+    public Class<?> getSupportedType() {
+        return super.getSupportedType();
     }
 }

@@ -2,6 +2,11 @@ package com.chao.failure_in_action.model.enums;
 
 import com.chao.failfast.internal.ResponseCode;
 
+/**
+ * 用户请求错误码
+ * @author Chao
+ * @Github <a href="https://github.com/KyrieChao/Failure">Failure</a>
+ */
 public enum UserCode implements ResponseCode {
     USERNAME_EXIST(400_01, "用户名已存在", "该用户名已被注册"),
     EMAIL_EXIST(400_02, "邮箱已存在", "该邮箱已被注册"),
