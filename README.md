@@ -1,7 +1,7 @@
 # Failure-in-Action
 
 > **Fail Fast, Fail Safe.**  
-> 一个基于 Spring Boot 3.5.7 的实战演示项目，核心展示如何通过“快速失败”（Fail-Fast）设计原则构建健壮的业务系统，并优雅地处理参数校验与全局异常。
+> 一个基于 Spring Boot 3.5.7 的实战演示项目，核心展示如何通过“快速失败”（Failure）设计原则构建健壮的业务系统，并优雅地处理参数校验与全局异常。
 
 ## 📚 项目简介
 
@@ -43,19 +43,6 @@ register(UserRegisterDTO.class, (dto, ctx) -> {
     // 3. 业务校验（数据库查重）
     checkDuplicate(dto, ctx);
 });
-```
-
-### 2. 全局异常处理
-
-[GlobalExceptionHandler](src/main/java/com/chao/failure_in_action/exception/GlobalExceptionHandler.java) 继承自 `DefaultExceptionHandler` 并标记 `@RestControllerAdvice`，自动捕获所有异常并返回统一格式：
-
-```json
-{
-  "code": 40000,
-  "data": null,
-  "message": "请求参数错误",
-  "description": "用户名不能为空"
-}
 ```
 
 ## 🔌 API 接口列表
