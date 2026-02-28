@@ -1,6 +1,7 @@
 package com.chao.failure_in_action.model.enums;
 
-import com.chao.failfast.internal.ResponseCode;
+
+import com.chao.failfast.internal.core.ResponseCode;
 
 /**
  * 请求错误码
