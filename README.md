@@ -151,16 +151,6 @@ public enum UserCode implements ResponseCode {
 }
 ```
 
-### 第三步：配置全局异常处理
-继承 `FailFastExceptionHandler`，实现零配置异常捕获：
-
-```java
-@RestControllerAdvice
-public class GlobalExceptionHandler extends FailFastExceptionHandler {
-    // 框架会自动处理 BusinessException 和 ValidationException
-    // 你可以在此覆盖方法以自定义响应格式
-}
-```
 
 ## 📂 项目结构
 
