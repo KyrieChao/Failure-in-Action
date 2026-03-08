@@ -2,15 +2,14 @@ package com.chao.failure_in_action.controller;
 
 import com.chao.failfast.annotation.Validate;
 import com.chao.failfast.result.Result;
+import com.chao.failure_in_action.model.dto.UserDTO;
 import com.chao.failure_in_action.model.dto.UserDeleteDTO;
 import com.chao.failure_in_action.model.dto.UserLoginDTO;
-import com.chao.failure_in_action.model.dto.UserRegisterDTO;
-import com.chao.failure_in_action.model.dto.UserUpdateDTO;
 import com.chao.failure_in_action.model.entity.User;
 import com.chao.failure_in_action.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +29,8 @@ public class UserController {
      * 注册
      */
     @PostMapping("/register")
-    public Result<Boolean> register(@RequestBody UserRegisterDTO dto) {
+    @Validate(fast = false)
+    public Result<Boolean> register(@RequestBody @Validated(UserDTO.Create.class) UserDTO dto) {
         boolean b = userService.register(dto);
         return Result.ok(b);
     }
@@ -48,8 +48,9 @@ public class UserController {
      * 修改用户信息 用户只能修改自己的信息
      */
     @PostMapping("/update")
-    @Validate(fast = false) // fast = false 开启收集失败模式
-    public Result<Boolean> updateUser(@RequestBody @Valid UserUpdateDTO dto, HttpServletRequest request) {
+    @Validate(fast = false)
+    // fast = false 开启收集失败模式
+    public Result<Boolean> updateUser(@RequestBody @Validated(UserDTO.Update.class) UserDTO dto, HttpServletRequest request) {
         boolean result = userService.updateUser(dto, request);
         return Result.ok(result);
     }

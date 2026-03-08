@@ -1,10 +1,7 @@
 package com.chao.failure_in_action.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chao.failure_in_action.model.dto.UserDeleteDTO;
-import com.chao.failure_in_action.model.dto.UserLoginDTO;
-import com.chao.failure_in_action.model.dto.UserRegisterDTO;
-import com.chao.failure_in_action.model.dto.UserUpdateDTO;
+import com.chao.failure_in_action.model.dto.*;
 import com.chao.failure_in_action.model.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,7 +13,7 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
 
-    boolean register(UserRegisterDTO dto);
+    boolean register(UserDTO dto);
 
     User login(UserLoginDTO dto, HttpServletRequest request);
 
@@ -30,5 +27,5 @@ public interface UserService extends IService<User> {
 
     User getSafetyUser(User originUser);
 
-    boolean updateUser(UserUpdateDTO dto, HttpServletRequest request);
+    boolean updateUser(UserDTO dto, HttpServletRequest request);
 }

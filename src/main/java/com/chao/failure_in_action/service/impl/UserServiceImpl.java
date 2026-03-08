@@ -5,15 +5,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chao.failfast.Failure;
 import com.chao.failfast.annotation.Validate;
 import com.chao.failure_in_action.mapper.UserMapper;
+import com.chao.failure_in_action.model.dto.UserDTO;
 import com.chao.failure_in_action.model.dto.UserDeleteDTO;
 import com.chao.failure_in_action.model.dto.UserLoginDTO;
-import com.chao.failure_in_action.model.dto.UserRegisterDTO;
-import com.chao.failure_in_action.model.dto.UserUpdateDTO;
 import com.chao.failure_in_action.model.entity.User;
 import com.chao.failure_in_action.model.enums.RequestCode;
 import com.chao.failure_in_action.model.enums.UserCode;
 import com.chao.failure_in_action.service.UserService;
 import com.chao.failure_in_action.validator.CustomValidator;
+import com.chao.failure_in_action.validator.UserRegisterValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -54,8 +54,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return 是否注册成功
      */
     @Override
-    @Validate(value = CustomValidator.class, fast = false) // 使用自定义验证器进行验证，fast=false表示不使用快速验证模式
-    public boolean register(UserRegisterDTO dto) {
+    @Validate(value = UserRegisterValidator.class, fast = false)
+    // 使用自定义验证器进行验证，fast=false表示不使用快速验证模式
+    public boolean register(UserDTO dto) {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setNickname(dto.getNickname());
@@ -172,7 +173,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return 更新成功返回true，否则返回false
      */
     @Override
-    public boolean updateUser(UserUpdateDTO dto, HttpServletRequest request) {
+    public boolean updateUser(UserDTO dto, HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) userObj;
         Failure.begin()

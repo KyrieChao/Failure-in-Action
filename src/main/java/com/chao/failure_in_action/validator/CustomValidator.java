@@ -1,19 +1,16 @@
 package com.chao.failure_in_action.validator;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.chao.failfast.Failure;
 import com.chao.failfast.validator.TypedValidator;
+import com.chao.failure_in_action.model.dto.UserDTO;
 import com.chao.failure_in_action.model.dto.UserLoginDTO;
-import com.chao.failure_in_action.model.dto.UserRegisterDTO;
 import com.chao.failure_in_action.model.entity.User;
 import com.chao.failure_in_action.model.enums.UserCode;
 import com.chao.failure_in_action.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
-
-import java.util.Set;
 
 import static com.chao.failure_in_action.contant.UserConstant.SALT;
 
@@ -31,57 +28,46 @@ import static com.chao.failure_in_action.contant.UserConstant.SALT;
  */
 @Component
 public class CustomValidator extends TypedValidator {
-    private static final Set<Integer> GENDER_STATUS = Set.of(0, 1, 2);
     @Resource
     private UserService userService;
 
     @Override
     protected void registerValidators() {
         // 登录校验
-        register(UserLoginDTO.class, (dto, ctx) -> {
-            Failure.with(ctx)
-                    .notBlank(dto.getPassword(), UserCode.PASSWORD_BLANK)
-                    .email(dto.getEmail(), UserCode.EMAIL_INVALID)
-                    .verify();
-            if (ctx.isFailed()) {
-                return;
-            }
-            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + dto.getPassword()).getBytes());
-            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("email", dto.getEmail());
-            queryWrapper.eq("password", encryptPassword);
-            User user = userService.getOne(queryWrapper);
-            Failure.with(ctx)
-                    .state(user != null, UserCode.USER_NOT_FOUND)
-                    .verify();
-        });
+        register(UserLoginDTO.class, this::validateLogin);
 
         // 注册校验
-        register(UserRegisterDTO.class, (dto, ctx) -> {
-            Failure.with(ctx)
-                    .satisfies(dto.getGender(), GENDER_STATUS::contains, UserCode.GENDER_UNKNOWN,"性别")
-                    .notBlank(dto.getUsername(), UserCode.USERNAME_BLANK)
-                    .notBlank(dto.getNickname(), UserCode.NICKNAME_BLANK)
-                    .email(dto.getEmail(), UserCode.EMAIL_INVALID)
-                    .mobile(dto.getPhone(), UserCode.PHONE_INVALID)
-                    .verify();
-            if (ctx.isFailed()) {
-                return;
-            }
-            checkDuplicate(dto, ctx);
-        });
+        register(UserDTO.class, this::validateRegister);
     }
 
-    private void checkDuplicate(UserRegisterDTO dto, ValidationContext context) {
-        if (exists(User::getUsername, dto.getUsername())) {
-            context.reportError(UserCode.USERNAME_EXIST);
-        }
-        if (exists(User::getEmail, dto.getEmail())) {
-            context.reportError(UserCode.EMAIL_EXIST);
-        }
-        if (exists(User::getPhone, dto.getPhone())) {
-            context.reportError(UserCode.PHONE_EXIST);
-        }
+    private void validateLogin(UserLoginDTO dto, ValidationContext ctx) {
+        // 1. 格式校验
+        Failure.with(ctx)
+                .notBlank(dto.getPassword(), UserCode.PASSWORD_BLANK)
+                .email(dto.getEmail(), UserCode.EMAIL_INVALID)
+                .verify();
+        // 登录参数校验 如有错误，则直接返回
+        if (ctx.isFailed()) return;
+
+        // 2. 业务校验（数据库）
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + dto.getPassword()).getBytes());
+        boolean exists = userService.lambdaQuery()
+                .eq(User::getEmail, dto.getEmail())
+                .eq(User::getPassword, encryptPassword)
+                .exists();
+
+        Failure.with(ctx)
+                .state(exists, UserCode.USER_NOT_FOUND)
+                .verify();
+    }
+
+    private void validateRegister(UserDTO dto, ValidationContext context) {
+        // 只校验数据库唯一性，字段格式由 @Validated 处理
+        Failure.with(context)
+                .isFalse(exists(User::getUsername, dto.getUsername()), UserCode.USERNAME_EXIST)
+                .isFalse(exists(User::getEmail, dto.getEmail()), UserCode.EMAIL_EXIST)
+                .isFalse(exists(User::getPhone, dto.getPhone()), UserCode.PHONE_EXIST)
+                .verify();
     }
 
     private boolean exists(SFunction<User, ?> column, Object value) {
@@ -94,6 +80,7 @@ public class CustomValidator extends TypedValidator {
 
     @Override
     public Class<?> getSupportedType() {
-        return super.getSupportedType();
+        // 支持多个类型，TypedValidator 内部会处理不同类型的校验
+        return Object.class;
     }
 }
