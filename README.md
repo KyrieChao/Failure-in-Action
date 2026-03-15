@@ -1,12 +1,14 @@
 # Failure in Action
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kyriechao/failure-spring-boot-starter.svg)](https://central.sonatype.com/artifact/io.github.kyriechao/failure-spring-boot-starter)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-green.svg)](https://spring.io/projects/spring-boot)
-[![Failure](https://img.shields.io/badge/Failure-1.0.2-orange.svg)](https://github.com/KyrieChao/Failure)
 
 > **Fail Fast, Fail Safe.**
 >
 > 一个基于 **Spring Boot 3 + Failure Framework** 的最佳实践演示项目。本项目展示了如何通过“声明式校验”与“函数式编程”思想，将复杂的业务校验逻辑从 Controller/Service 中剥离，构建高内聚、低耦合的健壮系统。
+
+[English Version](README_EN.md)
 
 ## 📚 场景痛点 vs 解决方案
 
@@ -120,6 +122,34 @@ public class UserRegisterValidator implements FastValidator<UserDTO> {
 }
 ```
 
+
+| 校验方式 | 调用示例                              | 报错定位        | 跳转 |
+| ---- |-----------------------------------| ----------------------- | -- |
+| 注解   | `@NotNull(groups = Create.class)` | `(UserDTO在 username)`   | ❌  |
+| 编程式  | `Failure...notBlank(...)...`      | `(CustomValidator.java:46)` | ✅  |
+
+### 注解驱动报错（字段级定位）
+```text
+2026-03-15T21:29:01.106+08:00 ERROR ... : 2. [UserController#register] {code=400, mes=参数校验失败, des=性别参数错误} (UserDTO在 gender)
+```
+> 定位到具体字段，适合 `@NotNull` 等注解场景
+![图1](./images/img.png)
+
+### 编程式报错（代码行级跳转）
+```text
+2026-03-15T21:32:40.552+08:00 ERROR ... : Failure :[UserServiceImpl#login] {code=400_12, mes=密码不能为空, des=密码字段必填} (CustomValidator.java:46)
+```
+![图2](./images/img_1.png)
+
+> `CustomValidator.java:46` 在 IDE 中可点击跳转，适合 `Failure...` 链式调用
+
+>  图中 `(CustomValidator.java:46)` 呈浅蓝色，表示 IDE 可点击跳转至源码
+
+
+**一眼区分**：
+- 看到 `在 xxx)` → 注解校验，检查字段上的注解
+- 看到 `.java:数字)` → 编程式校验，点击跳转改代码
+---
 ## 🚀 快速开始
 
 ### 第一步：引入依赖

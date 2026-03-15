@@ -2,7 +2,6 @@ package com.chao.failure_in_action.validator;
 
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.chao.failfast.Failure;
-import com.chao.failfast.annotation.FastValidator;
 import com.chao.failfast.validator.TypedValidator;
 import com.chao.failure_in_action.model.dto.UserDTO;
 import com.chao.failure_in_action.model.dto.UserLoginDTO;
@@ -37,7 +36,6 @@ public class CustomValidator extends TypedValidator {
     protected void registerValidators() {
         // 登录校验
         register(UserLoginDTO.class, this::validateLogin);
-
         // 注册校验
         register(UserDTO.class, this::validateRegister);
     }
