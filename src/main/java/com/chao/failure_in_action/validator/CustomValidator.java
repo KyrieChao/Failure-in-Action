@@ -2,6 +2,7 @@ package com.chao.failure_in_action.validator;
 
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.chao.failfast.Failure;
+import com.chao.failfast.annotation.FastValidator;
 import com.chao.failfast.validator.TypedValidator;
 import com.chao.failure_in_action.model.dto.UserDTO;
 import com.chao.failure_in_action.model.dto.UserLoginDTO;
@@ -31,6 +32,7 @@ public class CustomValidator extends TypedValidator {
     @Resource
     private UserService userService;
 
+
     @Override
     protected void registerValidators() {
         // 登录校验
@@ -46,6 +48,7 @@ public class CustomValidator extends TypedValidator {
                 .notBlank(dto.getPassword(), UserCode.PASSWORD_BLANK)
                 .email(dto.getEmail(), UserCode.EMAIL_INVALID)
                 .verify();
+
         // 登录参数校验 如有错误，则直接返回
         if (ctx.isFailed()) return;
 

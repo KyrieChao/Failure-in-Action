@@ -129,7 +129,7 @@ public class UserRegisterValidator implements FastValidator<UserDTO> {
 <dependency>
     <groupId>io.github.kyriechao</groupId>
     <artifactId>failure-spring-boot-starter</artifactId>
-    <version>1.0.2</version>
+    <version>1.1.1</version> <!-- 请使用最新版本 -->
 </dependency>
 ```
 
